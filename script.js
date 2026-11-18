@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const phone = (data.get('phone') || '').trim();
       const car = (data.get('car') || 'Не указан').trim();
       const service = (data.get('service') || '').trim();
+      const time = (data.get('time') || 'Не указано').trim();
       const message = (data.get('message') || 'Без комментариев').trim();
 
       const text = [
@@ -39,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `📞 Телефон: ${phone}`,
         `🚗 Авто: ${car}`,
         `🛠 Услуга: ${service}`,
+        `🕒 Желаемое время: ${time}`,
         `💬 Задача: ${message}`
       ].join('\n');
 
@@ -49,10 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (status) {
         status.innerHTML = `Заявка готова! <a href="${tgAppUrl}" style="color:#e5b869;text-decoration:underline;">Открыть в приложении Telegram</a> или <a href="${tgWebUrl}" target="_blank" rel="noopener" style="color:#e5b869;text-decoration:underline;">через браузер</a>.`;
       }
-
-      window.location.href = tgAppUrl;
-    });
-  }
 
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
