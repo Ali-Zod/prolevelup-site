@@ -178,24 +178,43 @@
     </div>
   </section>
 
-  <section class="prices section" id="prices">
+    <section class="prices section" id="prices">
     <div class="wrap">
       <div class="section-head">
-        <div><p class="eyebrow">ПРОЗРАЧНЫЕ УСЛОВИЯ</p><h2>ОСНОВНЫЕ <em>ЦЕНЫ</em></h2></div>
-        <p>Итоговая стоимость зависит от модели автомобиля и объёма работ. Согласуем её до начала ремонта.</p>
+        <div><p class="eyebrow">ПРОЗРАЧНЫЕ УСЛОВИЯ</p><h2>КАЛЬКУЛЯТОР <em>ЦЕН</em></h2></div>
+        <p>Выберите марку и модель автомобиля, чтобы увидеть актуальную стоимость и ориентировочное время выполнения работ.</p>
       </div>
-      <div class="price-list">
-        <div><span>Компьютерная диагностика (чтение ошибок, кодирование)</span><b>от 100 000 сум</b></div>
-        <div><span>Чистка дроссельной заслонки с адаптацией</span><b>от 100 000 сум</b></div>
-        <div><span>Замена свечей зажигания (с динамометрическим ключом)</span><b>от 50 000 сум</b></div>
-        <div><span>Чип-тюнинг (прошивка Stage 1 / 2 / 3 с сохранением ресурса)</span><b>от 400 000 сум</b></div>
-        <div><span>Сольвентная чистка инжекторов (без снятия рейки)</span><b>от 500 000 сум</b></div>
-        <div><span>Замена масла и технических жидкостей</span><b>После осмотра</b></div>
-        <div><span>Ремонт двигателя, ходовой части, автоэлектрика и тонировка</span><b>После осмотра</b></div>
+
+      <div class="calc-controls">
+        <label>Марка автомобиля
+          <select id="calc-brand"></select>
+        </label>
+        <label>Модель
+          <select id="calc-model"></select>
+        </label>
       </div>
-      <p class="price-note">Цены указаны как стартовые. Точный расчёт под ваш автомобиль подскажем при обращении.</p>
-    </div>
-  </section>
+
+      <div class="price-list" id="calc-results"></div>
+
+        <div class="calc-total-bar" id="calc-total-bar" style="display: none;">
+        <div>
+          <span class="calc-total-label">Выбрано услуг: <b id="calc-count">0</b></span>
+          <span class="calc-total-time" id="calc-total-time"></span>
+        </div>
+        <div class="calc-total-sum">Итого: <b id="calc-sum">0 сум</b></div>
+      </div>
+
+      <div class="calc-footer">
+        <p class="price-note">
+          Цены и время актуальны на момент публикации и носят ознакомительный характер. 
+          Для точного расчёта под ваш автомобиль позвоните в сервис: 
+          <a href="tel:+998909090098" style="color: var(--accent); font-weight: 700; text-decoration: underline;">+998 90 909 00 98</a>
+        </p>
+        <div class="actions">
+          <a class="btn btn-outline" href="tel:+998909090098">Позвонить в сервис ☎</a>
+          <a class="btn btn-light" href="#booking" id="calc-book-btn">Записаться ↗</a>
+        </div>
+      </div>
 
   <section class="reviews section wrap" id="reviews">
     <div class="section-head">
@@ -233,7 +252,7 @@
         </div>
       </div>
       <form id="booking-form" class="booking-form">
-        <label>Ваше имя<input name="name" required placeholder="Как к вам обращаться"></label>
+        <label><div id="selected-services-box" class="selected-box" style="display: none;"></div>Ваше имя<input name="name" required placeholder="Как к вам обращаться"></label>
         <label>Телефон<input name="phone" required type="tel" placeholder="+998 __ ___ __ __"></label>
         <label>Автомобиль<input name="car" placeholder="Марка, модель, год"></label>
         <label>Услуга
