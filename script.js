@@ -374,7 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. Отправка заявки в Telegram
+   // 4. Сохранение заявки в Google Таблицу и отправка в Telegram
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPJILBr28shJQzTEQvcTJ1GmSLCtDUXLsJVtjoBeb5n3itpk2byeynYj8LBy4jn6t8vQ/exec';
+
   const form = document.getElementById('booking-form');
   const status = document.getElementById('form-status');
   if (form) {
@@ -388,8 +390,30 @@ document.addEventListener('DOMContentLoaded', () => {
       const time = (data.get('time') || 'Не указано').trim();
       const message = (data.get('message') || '').trim();
 
+      const totalSumText = sumEl ? sumEl.textContent : '';
+      const servicesForDb = chosenServices.length > 0
+        ? `${chosenServices.join('; ')} | Итого: ${totalSumText}`
+        : service;
+
+      // Фоновая отправка в Google Таблицу (сохраняет заявку сразу при нажатии кнопки)
+      if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.startsWith('https://')) {
+        fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            phone: phone,
+            car: car,
+            services: servicesForDb,
+            time: time,
+            message: message
+          })
+        }).catch(() => {});
+      }
+
       const servicesLine = chosenServices.length > 0
-        ? `🛠 Выбранные услуги:\n• ${chosenServices.join('\n• ')}\n💰 Предварительный расчёт: ${sumEl ? sumEl.textContent : ''}`
+        ? `🛠 Выбранные услуги:\n• ${chosenServices.join('\n• ')}\n💰 Предварительный расчёт: ${totalSumText}`
         : `🛠 Услуга: ${service}`;
 
       const textLines = [
@@ -410,10 +434,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const tgWebUrl = 'https://t.me' + encoded;
 
       if (status) {
-        status.innerHTML = `Заявка готова! <a href="${tgAppUrl}" style="color:#e5b869;text-decoration:underline;">Открыть в приложении Telegram</a> или <a href="${tgWebUrl}" target="_blank" rel="noopener" style="color:#e5b869;text-decoration:underline;">через браузер</a>.`;
+        status.innerHTML = `Заявка сохранена! <a href="${tgAppUrl}" style="color:#e5b869;text-decoration:underline;">Открыть в приложении Telegram</a> или <a href="${tgWebUrl}" target="_blank" rel="noopener" style="color:#e5b869;text-decoration:underline;">через браузер</a>.`;
       }
 
-      window.location.href = tgAppUrl;
+      // Небольшая пауза (300 мс), чтобы запрос гарантированно успел уйти в Google Таблицу до перехода в Telegram
+      setTimeout(() => {
+        window.location.href = tgAppUrl;
+      }, 300);
     });
   }
 
